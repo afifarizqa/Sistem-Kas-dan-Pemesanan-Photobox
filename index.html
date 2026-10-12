@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Photobox Accounting</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <header>
+
+        <div>
+            <h1>Photobox Accounting</h1>
+            <p>Sistem Kas dan Pemesanan Photobox</p>
+        </div>
+
+    </header>
+
+
+    <!-- =====================================
+         NAVIGASI
+    ====================================== -->
+
+    <nav>
+
+        <button onclick="tampilkanHalaman('dashboard')">
+            Dashboard
+        </button>
+
+        <button onclick="tampilkanHalaman('pelanggan')">
+            Pelanggan
+        </button>
+
+        <button onclick="tampilkanHalaman('pemesanan')">
+            Pemesanan
+        </button>
+
+        <button onclick="tampilkanHalaman('kas')">
+            Transaksi Kas
+        </button>
+
+    </nav>
+
+
+    <main>
+
+
+        <!-- =================================
+             DASHBOARD
+        ================================== -->
+
+        <section id="dashboard" class="halaman">
+
+            <h2>Dashboard</h2>
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>Total Pelanggan</h3>
+                    <p id="jumlahPelanggan">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Total Pemesanan</h3>
+                    <p id="jumlahPemesanan">0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Total Pemasukan</h3>
+                    <p id="totalPemasukan">Rp0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Total Pengeluaran</h3>
+                    <p id="totalPengeluaran">Rp0</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             PELANGGAN
+        ================================== -->
+
+        <section id="pelanggan" class="halaman hidden">
+
+            <h2>Data Pelanggan</h2>
+
+            <form id="formPelanggan">
+
+                <div>
+                    <label>Nama Pelanggan</label>
+
+                    <input
+                        type="text"
+                        id="namaPelanggan"
+                        required
+                        placeholder="Masukkan nama">
+                </div>
+
+                <div>
+                    <label>No. HP</label>
+
+                    <input
+                        type="text"
+                        id="noHp"
+                        required
+                        placeholder="Masukkan nomor HP">
+                </div>
+
+                <button type="submit">
+                    Simpan Pelanggan
+                </button>
+
+                <button type="button" id="batalEditPelanggan" class="hidden">
+                    Batal Edit
+                </button>
+
+            </form>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama</th>
+                        <th>No. HP</th>
+                        <th>Aksi</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tabelPelanggan">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- =================================
+             PEMESANAN
+        ================================== -->
+
+        <section id="pemesanan" class="halaman hidden">
+
+            <h2>Pemesanan Photobox</h2>
+
+            <form id="formPemesanan">
+
+                <div>
+
+                    <label>Pelanggan</label>
+
+                    <select id="pelangganPemesanan" required>
+
+                        <option value="">
+                            -- Pilih Pelanggan --
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>Tanggal Sesi</label>
+
+                    <input
+                        type="date"
+                        id="tanggalSesi"
+                        required>
+
+                </div>
+
+
+                <div>
+
+                    <label>Jam Sesi</label>
+
+                    <input
+                        type="time"
+                        id="jamSesi"
+                        required>
+
+                </div>
+
+
+                <div>
+
+                    <label>Jenis Paket</label>
+
+                    <select id="jenisPaket" required>
+
+                        <option value="">
+                            -- Pilih Paket --
+                        </option>
+
+                        <option value="Paket Reguler">
+                            Paket Reguler
+                        </option>
+
+                        <option value="Paket Couple">
+                            Paket Couple
+                        </option>
+
+                        <option value="Paket Group">
+                            Paket Group
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>Total Harga</label>
+
+                    <input
+                        type="number"
+                        id="totalHarga"
+                        min="0"
+                        required
+                        placeholder="Contoh: 50000">
+
+                </div>
+
+
+                <div>
+
+                    <label>Status</label>
+
+                    <select id="statusPemesanan">
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="Booked">
+                            Booked
+                        </option>
+
+                        <option value="Selesai">
+                            Selesai
+                        </option>
+
+                        <option value="Batal">
+                            Batal
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button type="submit">
+                    Simpan Pemesanan
+                </button>
+
+                <button type="button" id="batalEditPemesanan" class="hidden">
+                    Batal Edit
+                </button>
+
+            </form>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Pelanggan</th>
+                        <th>Tanggal</th>
+                        <th>Jam</th>
+                        <th>Paket</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tabelPemesanan">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- =================================
+             TRANSAKSI KAS
+        ================================== -->
+
+        <section id="kas" class="halaman hidden">
+
+            <h2>Transaksi Kas</h2>
+
+            <form id="formKas">
+
+                <div>
+
+                    <label>Pemesanan</label>
+
+                    <select id="pemesananKas" required>
+
+                        <option value="">
+                            -- Pilih Pemesanan --
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>Jenis Transaksi</label>
+
+                    <select id="jenisKas" required>
+
+                        <option value="Pemasukan">
+                            Pemasukan
+                        </option>
+
+                        <option value="Pengeluaran">
+                            Pengeluaran
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label>Jumlah</label>
+
+                    <input
+                        type="number"
+                        id="jumlahKas"
+                        min="0"
+                        required
+                        placeholder="Contoh: 50000">
+
+                </div>
+
+
+                <div>
+
+                    <label>Keterangan</label>
+
+                    <input
+                        type="text"
+                        id="keteranganKas"
+                        placeholder="Keterangan transaksi">
+
+                </div>
+
+
+                <button type="submit">
+                    Simpan Transaksi
+                </button>
+
+                <button type="button" id="batalEditKas" class="hidden">
+                    Batal Edit
+                </button>
+
+            </form>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Pemesanan</th>
+                        <th>Tanggal</th>
+                        <th>Jenis</th>
+                        <th>Jumlah</th>
+                        <th>Keterangan</th>
+                        <th>Aksi</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tabelKas">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
